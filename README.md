@@ -22,7 +22,7 @@ After that you can construct a mapper by passing in the source object, target ob
 
 Call doMap() to perform the mapping and get the objects back as a result.
 
-'''
+```Apex
 Custom_Object_1__c obj1 = new Custom_Object_1__c;
 Custom_Object_2__c obj2 = new Custom_Object_2__c;
 
@@ -32,7 +32,7 @@ ObjectMapper mapper = new ObjectMapper(obj1, obj2, exceptions, true);
 
 mapper.doMap();
 
-'''
+```
 
 The above code will automatically run through each field in Custom_Object_1__c and map it to the corresponding field in Custom_Object_2__c.
 
@@ -56,7 +56,7 @@ Required fields are:
 Manual mappings are perfored in exactly the same way as automatic mappings - only you pass false as the last argument in the constructor.
 
 
-'''
+```Apex
 Custom_Object_1__c obj1 = new Custom_Object_1__c;
 Custom_Object_2__c obj2 = new Custom_Object_2__c;
 
@@ -66,6 +66,6 @@ ObjectMapper mapper = new ObjectMapper(obj1, obj2, exceptions, false);
 
 mapper.doMap();
 
-'''
+```
 
 This instructs the mapper to look for custom metadata where the source object is Custom_Object_1__c and the target object is Custom_Object_2__c;
