@@ -5,8 +5,6 @@ Mappings can be created automatically by dynamically iterating over fields or by
 
 This is designed so that you can create mappings between objects and keep them up to date without modifying and redeploying code.
 
-Code coverage is 100%.
-
 <a href="https://githubsfdeploy.herokuapp.com?owner=jtowers&repo=SObjectMapper">
   <img alt="Deploy to Salesforce"
        src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/src/main/webapp/resources/img/deploy.png">
@@ -28,7 +26,7 @@ Custom_Object_2__c obj2 = new Custom_Object_2__c;
 
 Set<String> exceptions = new Set<String>{'Custom_Field__c'}
 
-ObjectMapper mapper = new ObjectMapper(obj1, obj2, exceptions, true);
+ObjectMapper mapper = new ObjectMapper(obj1, obj2, exceptions, true, null, null);
 
 mapper.doMap();
 
@@ -61,11 +59,17 @@ Custom_Object_1__c obj1 = new Custom_Object_1__c;
 Custom_Object_2__c obj2 = new Custom_Object_2__c;
 
 Set<String> exceptions = new Set<String>{'Custom_Field__c'}
-
-ObjectMapper mapper = new ObjectMapper(obj1, obj2, exceptions, false);
+Set<String> includeLabels = new Set<String>{'ObjectMapper_Includes'};
+Set<String> excludeLabels = new Set<String>{'ObjectMapper_Excludes'};
+ObjectMapper mapper = new ObjectMapper(obj1, obj2, exceptions, false, excludeLabels, includeLabels);
 
 mapper.doMap();
 
 ```
 
 This instructs the mapper to look for custom metadata where the source object is Custom_Object_1__c and the target object is Custom_Object_2__c;
+You may also supply a list of labels (specified as a ; separated list of labels in Labels__c in the custom metadat record).
+
+Specifying a list of include labels means that the custom mapping must include at least one of those labels in order for the mapping to apply.
+
+Speciying a list of exclude labels means that the custom mapping will not apply if the mapping contains at least one of those labels.

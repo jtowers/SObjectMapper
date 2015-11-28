@@ -2,6 +2,14 @@
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
     <description>Define fields that map from one object to another</description>
     <fields>
+        <fullName>Labels__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Labels to apply to this mapping. Can be used to include/exclude mapping definitions from a particular mapping.</inlineHelpText>
+        <label>Labels</label>
+        <required>false</required>
+        <type>TextArea</type>
+    </fields>
+    <fields>
         <fullName>Mapping_Enabled__c</fullName>
         <defaultValue>true</defaultValue>
         <externalId>false</externalId>

@@ -5,15 +5,15 @@ private class ObjectMapperTests {
      * Test automapping between two objects.
      * Using the same object so we can verify that fields are transferred.
      * Test uses Contact->Contact but can map any object to any other
-     * @return [description]
      */
     @isTest static void test_constructor_auto() {
         Contact testcontact1 = new Contact(FirstName = 'Test', LastName = 'Contact1');
         Contact testcontact2 = new Contact(FirstName = 'Test', LastName = 'Contact2');
-
+        Set<String> includeLabels = new Set<String>();
+        includeLabels.add('ObjectMapper_Test_Include');
         Test.startTest();
 
-        ObjectMapper mapper = new ObjectMapper(testcontact1, testcontact2, null, true);
+        ObjectMapper mapper = new ObjectMapper(testcontact1, testcontact2, null, true, null, includeLabels);
         mapper.doMap();
 
         Test.stopTest();
@@ -24,15 +24,16 @@ private class ObjectMapperTests {
     /**
      * Test automapping with exceptions.
      * Should copy every field that maps over except the exception
-     * @return [description]
      */
     @isTest static void test_constructor_auto_with_exceptions() {
         Contact testcontact1 = new Contact(FirstName = 'Test1', LastName = 'Contact1');
         Contact testcontact2 = new Contact(FirstName = 'Test2', LastName = 'Contact2');
         Set<String> exceptions = new Set<String> {'FirstName'};
+        Set<String> includeLabels = new Set<String>();
+        includeLabels.add('ObjectMapper_Test_Include');
         Test.startTest();
 
-        ObjectMapper mapper = new ObjectMapper(testcontact1, testcontact2, exceptions, true);
+        ObjectMapper mapper = new ObjectMapper(testcontact1, testcontact2, exceptions, true, null, includeLabels);
         Map<String, SObject> results = mapper.doMap();
 
         Test.stopTest();
@@ -51,10 +52,11 @@ private class ObjectMapperTests {
 
         Account testAccount = new Account(Name = 'Test Account');
         Contact testcontact = new Contact(FirstName = 'Test', LastName = 'Contact2');
-
+        Set<String> includeLabels = new Set<String>();
+        includeLabels.add('ObjectMapper_Test_Include');
         Test.startTest();
 
-        ObjectMapper mapper = new ObjectMapper(testAccount, testcontact, null, true);
+        ObjectMapper mapper = new ObjectMapper(testAccount, testcontact, null, true, null, includeLabels);
         mapper.doMap();
 
         Test.stopTest();
@@ -68,9 +70,10 @@ private class ObjectMapperTests {
     @isTest static void test_manual_map() {
         Account testAccount = new Account(Name = 'Test Account');
         Contact testContact = new Contact(FirstName = 'Test', LastName = 'Contact');
-        Object_Mapper_Field__mdt fieldMap = new Object_Mapper_Field__mdt();
+        Set<String> includeLabels = new Set<String>();
+        includeLabels.add('ObjectMapper_Test_Include');
 
-        ObjectMapper mapper = new ObjectMapper(testAccount, testContact, null, false);
+        ObjectMapper mapper = new ObjectMapper(testAccount, testContact, null, false, null, includeLabels);
         Test.startTest();
         Map<String, SObject> results = mapper.doMap();
         Test.stopTest();
@@ -80,5 +83,49 @@ private class ObjectMapperTests {
 
         System.assertEquals(resultAccount.Name, resultContact.LastName);
     }
+
+    /**
+     * Test exceptions to make sure that you can exclue certain mappings
+     */
+    @isTest static void test_exclude_mappings(){
+        Account testAccount = new Account(Name = 'Test Account');
+        Contact testContact = new Contact(FirstName = 'Test', LastName = 'Contact');
+        Set<String> excludeLabels = new Set<String>();
+        excludeLabels.add('ObjectMapper_Test_Exclude');
+        ObjectMapper mapper = new ObjectMapper(testAccount, testContact, null, false, excludeLabels, null);
+        Test.startTest();
+        System.debug('doing exclude tests');
+        Map<String, SObject> results = mapper.doMap();
+        Test.stopTest();
+
+        Account resultAccount = (Account)results.get('source');
+        Contact resultContact = (Contact)results.get('target');
+
+        System.assertNotEquals(resultAccount.Name, resultContact.LastName);
+
+    }
+
+        /**
+     * Test exceptions to make sure that you can include certain mappings
+     */
+    @isTest static void test_include_mappings(){
+        Account testAccount = new Account(Name = 'Test Account');
+        Contact testContact = new Contact(FirstName = 'Test', LastName = 'Contact');
+        Set<String> includeLabels = new Set<String>();
+        includeLabels.add('ObjectMapper_Test_Include');
+        ObjectMapper mapper = new ObjectMapper(testAccount, testContact, null, false,null,includeLabels);
+        Test.startTest();
+        System.debug('doing include tests');
+        Map<String, SObject> results = mapper.doMap();
+        Test.stopTest();
+
+        Account resultAccount = (Account)results.get('source');
+        Contact resultContact = (Contact)results.get('target');
+
+        System.assertEquals(resultAccount.Name, resultContact.LastName);
+
+    }
+
+
 
 }
