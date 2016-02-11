@@ -3,7 +3,7 @@
     <label>Test Mapper</label>
     <values>
         <field>Labels__c</field>
-        <value xsi:type="xsd:string">ObjectMapper_Test</value>
+        <value xsi:type="xsd:string">ObjectMapper_Test;ObjectMapper_Test_Include;ObjectMapper_Test_Exclude</value>
     </values>
     <values>
         <field>Mapping_Enabled__c</field>
